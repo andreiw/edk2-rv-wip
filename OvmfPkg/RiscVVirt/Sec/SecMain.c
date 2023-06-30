@@ -52,7 +52,6 @@ SecStartup (
   )
 {
   EFI_HOB_HANDOFF_INFO_TABLE  *HobList;
-  EFI_RISCV_FIRMWARE_CONTEXT  FirmwareContext;
   EFI_STATUS                  Status;
   UINT64                      UefiMemoryBase;
   UINT64                      StackBase;
@@ -70,8 +69,6 @@ SecStartup (
     BootHartId,
     DeviceTreeAddress
     ));
-
-  SetFirmwareContextPointer (&FirmwareContext);
 
   StackBase      = (UINT64)FixedPcdGet32 (PcdOvmfSecPeiTempRamBase);
   StackSize      = FixedPcdGet32 (PcdOvmfSecPeiTempRamSize);
