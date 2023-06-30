@@ -92,6 +92,7 @@ MemoryPeimInitialization (
 /**
   Perform CPU PEIM initialization.
 
+  @param  BootHartId      Hardware thread ID of booting hart.
   @return EFI_SUCCESS     The platform initialized successfully.
   @retval  Others        - As the error code indicates
 
@@ -99,7 +100,7 @@ MemoryPeimInitialization (
 EFI_STATUS
 EFIAPI
 CpuPeimInitialization (
-  VOID
+  IN  UINTN  BootHartId
   );
 
 #endif

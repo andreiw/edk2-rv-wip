@@ -857,6 +857,12 @@
   gEfiDiskInfoSdMmcInterfaceGuid  = { 0x8deec992, 0xd39c, 0x4a5c, { 0xab, 0x6b, 0x98, 0x6e, 0x14, 0x24, 0x2b, 0x9d }}
 
   #
+  # GUID defined in PIX.X
+  #
+  ## Include/Guid/RiscVCpuHob.h
+  gEfiRiscVCpuHobGuid             = { 0xab2f45ab, 0xb021, 0xcf93, { 0x9a, 0xbe, 0x10, 0x53, 0xf4, 0x3d, 0x61, 0x11 }}
+
+  #
   # GUID defined in Windows UEFI Firmware Update Platform doc
   #
   ## Include/IndustryStandard/WindowsUxCapsule.h

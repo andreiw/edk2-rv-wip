@@ -67,7 +67,6 @@
 #define SBI_LAST_ERR  SBI_ERR_ALREADY_STOPPED
 
 typedef struct {
-  UINT64    BootHartId;
   VOID      *PeiServiceTable;    // PEI Service table
   VOID      *PrePiHobList;       // Pre PI Hob List
 } EFI_RISCV_FIRMWARE_CONTEXT;

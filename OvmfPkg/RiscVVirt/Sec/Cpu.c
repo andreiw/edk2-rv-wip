@@ -14,16 +14,29 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
+#include <Guid/RiscVCpuHob.h>
 
 /**
   Cpu Peim initialization.
 
+  @param  BootHartId      Hardware thread ID of booting hart.
+  @return EFI_SUCCESS     The platform initialized successfully.
 **/
 EFI_STATUS
 CpuPeimInitialization (
-  VOID
+  IN  UINTN  BootHartId
   )
 {
+  EFI_RISCV_CPU_HOB *RiscVCpuHobData;
+
+  RiscVCpuHobData = BuildGuidHob (&gEfiRiscVCpuHobGuid, sizeof *RiscVCpuHobData);
+  if (RiscVCpuHobData == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: couldn't build EFI_RISCV_CPU_HOB\n", __func__));
+    return EFI_UNSUPPORTED;
+  }
+
+  RiscVCpuHobData->BootHartId = BootHartId;
+  
   //
   // for MMU type >= sv39
   //

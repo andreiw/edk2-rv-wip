@@ -14,6 +14,7 @@ STATIC
 EFI_STATUS
 EFIAPI
 SecInitializePlatform (
+  IN  UINTN  BootHartId,
   IN  VOID  *DeviceTreeAddress
   )
 {
@@ -21,7 +22,7 @@ SecInitializePlatform (
 
   MemoryPeimInitialization (DeviceTreeAddress);
 
-  CpuPeimInitialization ();
+  CpuPeimInitialization (BootHartId);
 
   // Set the Boot Mode
   SetBootMode (BOOT_WITH_FULL_CONFIGURATION);
@@ -70,7 +71,6 @@ SecStartup (
     DeviceTreeAddress
     ));
 
-  FirmwareContext.BootHartId          = BootHartId;
   SetFirmwareContextPointer (&FirmwareContext);
 
   StackBase      = (UINT64)FixedPcdGet32 (PcdOvmfSecPeiTempRamBase);
@@ -86,7 +86,7 @@ SecStartup (
               );
   PrePeiSetHobList (HobList);
 
-  SecInitializePlatform (DeviceTreeAddress);
+  SecInitializePlatform (BootHartId, DeviceTreeAddress);
 
   BuildStackHob (StackBase, StackSize);
 

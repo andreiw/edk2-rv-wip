@@ -318,19 +318,17 @@ InitializeCpu (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  EFI_STATUS                  Status;
-  EFI_RISCV_FIRMWARE_CONTEXT  *FirmwareContext;
+  VOID              *Hob;
+  EFI_STATUS         Status;
+  EFI_RISCV_CPU_HOB *RiscVCpuHob;
 
-  GetFirmwareContextPointer (&FirmwareContext);
-  ASSERT (FirmwareContext != NULL);
-  if (FirmwareContext == NULL) {
-    DEBUG ((DEBUG_ERROR, "Failed to get the pointer of EFI_RISCV_FIRMWARE_CONTEXT\n"));
+  Hob = GetFirstGuidHob (&gEfiRiscVCpuHobGuid);
+  if ((Hob == NULL) || (GET_GUID_HOB_DATA_SIZE (Hob) != sizeof (EFI_RISCV_CPU_HOB))) {
     return EFI_NOT_FOUND;
   }
+  RiscVCpuHob = GET_GUID_HOB_DATA (Hob);
 
-  DEBUG ((DEBUG_INFO, " %a: Firmware Context is at 0x%x.\n", __func__, FirmwareContext));
-
-  mBootHartId = FirmwareContext->BootHartId;
+  mBootHartId = RiscVCpuHob->BootHartId;
   DEBUG ((DEBUG_INFO, " %a: mBootHartId = 0x%x.\n", __func__, mBootHartId));
 
   InitializeCpuExceptionHandlers (NULL);
