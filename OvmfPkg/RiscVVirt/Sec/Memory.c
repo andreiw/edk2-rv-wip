@@ -27,7 +27,6 @@ Module Name:
 #include <Library/PcdLib.h>
 #include <Library/PeimEntryPoint.h>
 #include <Library/ResourcePublicationLib.h>
-#include <Library/BaseRiscVSbiLib.h>
 #include <Register/RiscV64/RiscVEncoding.h>
 #include <Library/PrePiLib.h>
 #include <libfdt.h>
@@ -256,49 +255,34 @@ AddReservedMemoryMap (
 /**
   Initialize memory hob based on the DTB information.
 
-  @return EFI_SUCCESS     The memory hob added successfully.
+  @param  DeviceTreeAddress  Pointer to FDT.
+  @return EFI_SUCCESS        The memory hob added successfully.
 
 **/
 EFI_STATUS
 MemoryPeimInitialization (
-  VOID
+  IN  VOID  *DeviceTreeAddress
   )
 {
-  EFI_RISCV_FIRMWARE_CONTEXT  *FirmwareContext;
   CONST UINT64                *RegProp;
   CONST CHAR8                 *Type;
   UINT64                      CurBase, CurSize;
   INT32                       Node, Prev;
   INT32                       Len;
-  VOID                        *FdtPointer;
-
-  FirmwareContext = NULL;
-  GetFirmwareContextPointer (&FirmwareContext);
-
-  if (FirmwareContext == NULL) {
-    DEBUG ((DEBUG_ERROR, "%a: Firmware Context is NULL\n", __func__));
-    return EFI_UNSUPPORTED;
-  }
-
-  FdtPointer = (VOID *)FirmwareContext->FlattenedDeviceTree;
-  if (FdtPointer == NULL) {
-    DEBUG ((DEBUG_ERROR, "%a: Invalid FDT pointer\n", __func__));
-    return EFI_UNSUPPORTED;
-  }
 
   // Look for the lowest memory node
   for (Prev = 0; ; Prev = Node) {
-    Node = fdt_next_node (FdtPointer, Prev, NULL);
+    Node = fdt_next_node (DeviceTreeAddress, Prev, NULL);
     if (Node < 0) {
       break;
     }
 
     // Check for memory node
-    Type = fdt_getprop (FdtPointer, Node, "device_type", &Len);
+    Type = fdt_getprop (DeviceTreeAddress, Node, "device_type", &Len);
     if (Type && (AsciiStrnCmp (Type, "memory", Len) == 0)) {
       // Get the 'reg' property of this node. For now, we will assume
       // two 8 byte quantities for base and size, respectively.
-      RegProp = fdt_getprop (FdtPointer, Node, "reg", &Len);
+      RegProp = fdt_getprop (DeviceTreeAddress, Node, "reg", &Len);
       if ((RegProp != 0) && (Len == (2 * sizeof (UINT64)))) {
         CurBase = fdt64_to_cpu (ReadUnaligned64 (RegProp));
         CurSize = fdt64_to_cpu (ReadUnaligned64 (RegProp + 1));
@@ -325,7 +309,7 @@ MemoryPeimInitialization (
     }
   }
 
-  AddReservedMemoryMap (FdtPointer);
+  AddReservedMemoryMap (DeviceTreeAddress);
 
   InitMmu ();
 

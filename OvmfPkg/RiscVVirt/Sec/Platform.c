@@ -15,46 +15,35 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/BaseRiscVSbiLib.h>
 #include <Library/PcdLib.h>
 #include <Include/Library/PrePiLib.h>
 #include <libfdt.h>
 #include <Guid/FdtHob.h>
 
 /**
+  @param DeviceTreeAddress       Pointer to FDT.
   @retval EFI_SUCCESS            The address of FDT is passed in HOB.
           EFI_UNSUPPORTED        Can't locate FDT.
 **/
 EFI_STATUS
 EFIAPI
 PlatformPeimInitialization (
-  VOID
+  IN  VOID  *DeviceTreeAddress
   )
 {
-  EFI_RISCV_FIRMWARE_CONTEXT  *FirmwareContext;
-  VOID                        *FdtPointer;
   VOID                        *Base;
   VOID                        *NewBase;
   UINTN                       FdtSize;
   UINTN                       FdtPages;
   UINT64                      *FdtHobData;
 
-  FirmwareContext = NULL;
-  GetFirmwareContextPointer (&FirmwareContext);
-
-  if (FirmwareContext == NULL) {
-    DEBUG ((DEBUG_ERROR, "%a: Firmware Context is NULL\n", __func__));
-    return EFI_UNSUPPORTED;
-  }
-
-  FdtPointer = (VOID *)FirmwareContext->FlattenedDeviceTree;
-  if (FdtPointer == NULL) {
+  if (DeviceTreeAddress == NULL) {
     DEBUG ((DEBUG_ERROR, "%a: Invalid FDT pointer\n", __func__));
     return EFI_UNSUPPORTED;
   }
 
-  DEBUG ((DEBUG_INFO, "%a: Build FDT HOB - FDT at address: 0x%x \n", __func__, FdtPointer));
-  Base = FdtPointer;
+  DEBUG ((DEBUG_INFO, "%a: Build FDT HOB - FDT at address: 0x%x \n", __func__, DeviceTreeAddress));
+  Base = DeviceTreeAddress;
   if (fdt_check_header (Base) != 0) {
     DEBUG ((DEBUG_ERROR, "%a: Corrupted DTB\n", __func__));
     return EFI_UNSUPPORTED;

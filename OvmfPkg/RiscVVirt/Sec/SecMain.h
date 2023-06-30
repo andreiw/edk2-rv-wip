@@ -64,27 +64,29 @@ ProcessLibraryConstructorList (
 /**
   Perform Platform PEIM initialization.
 
-  @return EFI_SUCCESS     The platform initialized successfully.
-  @retval  Others        - As the error code indicates
+  @param  DeviceTreeAddress  Pointer to FDT.
+  @return EFI_SUCCESS        The platform initialized successfully.
+  @retval  Others          - As the error code indicates
 
 **/
 EFI_STATUS
 EFIAPI
 PlatformPeimInitialization (
-  VOID
+  IN  VOID  *DeviceTreeAddress
   );
 
 /**
   Perform Memory PEIM initialization.
 
-  @return EFI_SUCCESS     The platform initialized successfully.
-  @retval  Others        - As the error code indicates
+  @param  DeviceTreeAddress  Pointer to FDT.
+  @return EFI_SUCCESS        The platform initialized successfully.
+  @retval  Others          - As the error code indicates
 
 **/
 EFI_STATUS
 EFIAPI
 MemoryPeimInitialization (
-  VOID
+  IN  VOID   *DeviceTreeAddress
   );
 
 /**

@@ -70,7 +70,6 @@ typedef struct {
   UINT64    BootHartId;
   VOID      *PeiServiceTable;    // PEI Service table
   VOID      *PrePiHobList;       // Pre PI Hob List
-  UINT64    FlattenedDeviceTree; // Pointer to Flattened Device tree
 } EFI_RISCV_FIRMWARE_CONTEXT;
 
 //
