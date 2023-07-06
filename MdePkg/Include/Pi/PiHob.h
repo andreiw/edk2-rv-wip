@@ -26,6 +26,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define EFI_HOB_TYPE_LOAD_PEIM_UNUSED     0x000A
 #define EFI_HOB_TYPE_UEFI_CAPSULE         0x000B
 #define EFI_HOB_TYPE_FV3                  0x000C
+#define EFI_HOB_TYPE_CPU_RISCV            0x000D
 #define EFI_HOB_TYPE_UNUSED               0xFFFE
 #define EFI_HOB_TYPE_END_OF_HOB_LIST      0xFFFF
 
@@ -460,6 +461,21 @@ typedef struct {
   ///
   UINT8                     Reserved[6];
 } EFI_HOB_CPU;
+
+///
+/// Describes additional RISC-V processor information,
+/// on top of information provided by EFI_HOB_CPU.
+///
+typedef struct {
+  ///
+  /// The HOB generic header. Header.HobType = EFI_HOB_TYPE_CPU_RISCV.
+  ///
+  EFI_HOB_GENERIC_HEADER    Header;
+  ///
+  /// Booting hart ID.
+  ///
+  UINT64                    BootHartId;
+} EFI_HOB_CPU_RISCV;
 
 ///
 /// Describes pool memory allocations.

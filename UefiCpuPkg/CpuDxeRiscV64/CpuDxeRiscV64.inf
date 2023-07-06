@@ -47,7 +47,6 @@
 
 [Guids]
   gIdleLoopEventGuid                            ## CONSUMES           ## Event
-  gEfiRiscVCpuHobGuid
 
 [Ppis]
   gEfiSecPlatformInformation2PpiGuid            ## UNDEFINED # HOB

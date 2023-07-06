@@ -13,8 +13,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <PiPei.h>
 
 #include <Library/DebugLib.h>
+#include <Library/PrePiLib.h>
 #include <Library/HobLib.h>
-#include <Guid/RiscVCpuHob.h>
 
 /**
   Cpu Peim initialization.
@@ -27,16 +27,11 @@ CpuPeimInitialization (
   IN  UINTN  BootHartId
   )
 {
-  EFI_RISCV_CPU_HOB *RiscVCpuHobData;
+  EFI_HOB_CPU_RISCV *RiscVCpuHob;
 
-  RiscVCpuHobData = BuildGuidHob (&gEfiRiscVCpuHobGuid, sizeof *RiscVCpuHobData);
-  if (RiscVCpuHobData == NULL) {
-    DEBUG ((DEBUG_ERROR, "%a: couldn't build EFI_RISCV_CPU_HOB\n", __func__));
-    return EFI_UNSUPPORTED;
-  }
+  RiscVCpuHob = CreateHob (EFI_HOB_TYPE_CPU_RISCV, sizeof (EFI_HOB_CPU_RISCV));
+  RiscVCpuHob->BootHartId = BootHartId;
 
-  RiscVCpuHobData->BootHartId = BootHartId;
-  
   //
   // for MMU type >= sv39
   //

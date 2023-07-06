@@ -20,7 +20,6 @@
 #include <Library/HobLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiDriverEntryPoint.h>
-#include <Guid/RiscVCpuHob.h>
 
 /**
   Flush CPU data cache. If the instruction cache is fully coherent

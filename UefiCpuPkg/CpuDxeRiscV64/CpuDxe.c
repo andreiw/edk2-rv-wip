@@ -318,15 +318,13 @@ InitializeCpu (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  VOID              *Hob;
   EFI_STATUS         Status;
-  EFI_RISCV_CPU_HOB *RiscVCpuHob;
+  EFI_HOB_CPU_RISCV *RiscVCpuHob;
 
-  Hob = GetFirstGuidHob (&gEfiRiscVCpuHobGuid);
-  if ((Hob == NULL) || (GET_GUID_HOB_DATA_SIZE (Hob) != sizeof (EFI_RISCV_CPU_HOB))) {
+  RiscVCpuHob = GetFirstHob (EFI_HOB_TYPE_CPU_RISCV);
+  if ((RiscVCpuHob == NULL) || (GET_HOB_LENGTH (RiscVCpuHob) != sizeof (EFI_HOB_CPU_RISCV))) {
     return EFI_NOT_FOUND;
   }
-  RiscVCpuHob = GET_GUID_HOB_DATA (Hob);
 
   mBootHartId = RiscVCpuHob->BootHartId;
   DEBUG ((DEBUG_INFO, " %a: mBootHartId = 0x%x.\n", __func__, mBootHartId));
